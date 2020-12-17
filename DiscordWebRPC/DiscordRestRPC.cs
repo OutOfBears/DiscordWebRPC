@@ -25,13 +25,13 @@ namespace DiscordWebRPC
 
         public async Task<InviteEvent> SendInvite(string code)
         {
-            return await RPCRequest(HttpMethod.Post, "INVITE_BROWSER", new InviteEvent
+            return await RPCRequest("INVITE_BROWSER", new InviteEvent
             {
                 Code = code
             }) as InviteEvent;
         }
 
-        private async Task<object> RPCRequest<T>(HttpMethod method, string cmd, T rpcRequestArgs)
+        private async Task<object> RPCRequest<T>(string cmd, T rpcRequestArgs)
         {
             var currentPort = _lastUsedPort;
             var startingPort = currentPort;

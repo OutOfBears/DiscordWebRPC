@@ -5,7 +5,7 @@ using System.Text;
 namespace DiscordWebRPC
 {
     // Constants used for discord RPC
-    public static class DiscordRPC
+    internal static class DiscordRPC
     {
         // Constant values, change at will with disocrd
         // How to connect to RPC

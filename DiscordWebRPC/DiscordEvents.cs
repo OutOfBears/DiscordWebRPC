@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DiscordWebRPC
 {
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
 
     // Main Event
     [JsonConverter(typeof(DiscordEventConverter))]
-    public class RPCEvent
+    internal class RPCEvent
     {
         [JsonProperty("cmd")]
         public string Cmd { get; set; }

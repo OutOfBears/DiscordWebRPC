@@ -2,15 +2,14 @@
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
-using System.Text;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace DiscordWebRPC
 {
-    [AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct)]
-    public class DiscordEventAttribute : System.Attribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    internal class DiscordEventAttribute : Attribute
     {
         public string Command;
 
