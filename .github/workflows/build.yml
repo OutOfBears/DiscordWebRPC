@@ -19,7 +19,24 @@ jobs:
         dotnet-version: 3.1.301
     - name: Restore dependencies
       run: dotnet restore
+      
     - name: Build
       run: dotnet build --no-restore
+      
 #     - name: Test
 #       run: dotnet test --no-build --verbosity normal
+
+    - name: Publish
+      run: dotnet publish
+
+#    - name: Upload DiscordWebRPC Build Artifact
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: WebApp1
+#        path: /home/runner/work/DiscordWebRPC/DiscordWebRPC/DiscordWebRPC/bin/Debug/netstandard2.0/
+    
+#    - name: Upload DiscordWebRPC.Test Build Artifact
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: WebApp2
+#        path: /home/runner/work/Playground/Playground/src/WebApp2/bin/Debug/netcoreapp3.1/publish/
