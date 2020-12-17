@@ -32,7 +32,7 @@ namespace DiscordWebRPC
 
         public async Task<InviteEvent> SendInvite(string code)
         {
-            if (!Connected())
+            if (!Connected)
                 throw new InvalidOperationException();
 
             var task = new TaskCompletionSource<object>();
@@ -49,7 +49,7 @@ namespace DiscordWebRPC
 
         public async Task<bool> Connect()
         {
-            if (Connected())
+            if (Connected)
                 return true;
 
             var rpcPort = DiscordRPC.RPC_STARTING_PORT;
@@ -97,11 +97,6 @@ namespace DiscordWebRPC
             _socket.Send(serializedObj);
         }
 
-        private bool Connected()
-        {
-            if (_socket != null && _socket.State == WebSocketState.Open)
-                return true;
-            return false;
-        }
+        private bool Connected => _socket != null && _socket.State == WebSocketState.Open;
     }
 }
