@@ -5,11 +5,22 @@ namespace DiscordWebRPC.Test
 {
     class Program
     {
-        static void Main(string[] args) => RunAsync(args).GetAwaiter().GetResult();
+        // switch me between rest and socket
+        static void Main(string[] args) => 
+            RunRestAsync(args).GetAwaiter().GetResult();
 
-        static async Task RunAsync(string[] args)
+        static async Task RunRestAsync(string[] args)
         {
-            var client = new DiscordWebRPC();
+            var client = new DiscordRestRPC();
+            var invite = await client.SendInvite("roblox");
+
+            Console.WriteLine("Response: {0}", invite);
+            await Task.Delay(-1);
+        }
+
+        static async Task RunSocketAsync(string[] args)
+        {
+            var client = new DiscordSocketRPC();
             client.OnDispatch += Client_OnDispatch;
 
             if(!await client.Connect())
@@ -18,10 +29,9 @@ namespace DiscordWebRPC.Test
                 return;
             }
 
-            client.GetGuilds();
+            var invite = await client.SendInvite("roblox");
+            Console.WriteLine("Response: {0}", invite);
             await Task.Delay(-1);
-            //var invite = await client.SendInvite("roblox");
-            //Console.WriteLine("Response: {0}", invite);
         }
 
         private static void Client_OnDispatch(object sender, DispatchEvent e)

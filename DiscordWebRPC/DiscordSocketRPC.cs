@@ -9,17 +9,8 @@ namespace DiscordWebRPC
 {
     using TaskQueue = ConcurrentDictionary<Guid, TaskCompletionSource<object>>;
 
-    public class DiscordWebRPC
+    public class DiscordSocketRPC
     {
-        // Constant values, change at will with disocrd
-        // How to connect to RPC
-        private const short RPC_VERSION = 1;
-        private const short RPC_PORT_RANGE = 10;
-        private const short RPC_STARTING_PORT = 6463;
-
-        // This is required
-        private const string RPC_ORIGIN = "https://discord.com";
-
         // private members
         private WebSocket _socket;
         private TaskQueue _taskQueue;
@@ -28,7 +19,7 @@ namespace DiscordWebRPC
         // public events
         public event EventHandler<DispatchEvent> OnDispatch;
 
-        public DiscordWebRPC()
+        public DiscordSocketRPC()
         {
             _jsonSettings = new JsonSerializerSettings
             {
@@ -61,19 +52,19 @@ namespace DiscordWebRPC
             if (Connected())
                 return true;
 
-            var rpcPort = RPC_STARTING_PORT;
+            var rpcPort = DiscordRPC.RPC_STARTING_PORT;
             _taskQueue.Clear();
 
             do
             {
-                _socket = new WebSocket($"ws://127.0.0.1:{rpcPort--}?v={RPC_VERSION}", origin: RPC_ORIGIN);
+                _socket = new WebSocket($"ws://127.0.0.1:{rpcPort--}?v={DiscordRPC.RPC_VERSION}", origin: DiscordRPC.RPC_ORIGIN);
                 _socket.MessageReceived += _socket_OnMessage;
                 _socket.NoDelay = true;
 
                 if (await _socket.OpenAsync())
                     return true;
 
-            } while (rpcPort >= RPC_STARTING_PORT - RPC_PORT_RANGE);
+            } while (rpcPort >= DiscordRPC.RPC_ENDING_PORT);
 
             return false;
         }
