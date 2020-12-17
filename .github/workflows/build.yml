@@ -29,14 +29,14 @@ jobs:
     - name: Publish
       run: dotnet publish
 
-#    - name: Upload DiscordWebRPC Build Artifact
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: WebApp1
-#        path: /home/runner/work/DiscordWebRPC/DiscordWebRPC/DiscordWebRPC/bin/Debug/netstandard2.0/
+    - name: Upload DiscordWebRPC Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: DiscordWebRPC
+        path: /home/runner/work/DiscordWebRPC/DiscordWebRPC/DiscordWebRPC/bin/Debug/netstandard2.0/publish/
     
-#    - name: Upload DiscordWebRPC.Test Build Artifact
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: WebApp2
-#        path: /home/runner/work/Playground/Playground/src/WebApp2/bin/Debug/netcoreapp3.1/publish/
+    - name: Upload DiscordWebRPC.Test Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: DiscordWebRPC.Test
+        path: /home/runner/work/DiscordWebRPC/DiscordWebRPC/DiscordWebRPC.Test/bin/Debug/netcoreapp2.1/publish/
