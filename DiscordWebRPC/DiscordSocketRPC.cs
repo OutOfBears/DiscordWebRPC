@@ -44,7 +44,7 @@ namespace DiscordWebRPC
                 Code = code
             });
 
-            return await task.Task as InviteEvent;
+            return await task.Task.ConfigureAwait(false) as InviteEvent;
         }
 
         public async Task<bool> Connect()
@@ -52,19 +52,17 @@ namespace DiscordWebRPC
             if (Connected)
                 return true;
 
-            var rpcPort = DiscordRPC.RPC_STARTING_PORT;
             _taskQueue.Clear();
 
-            do
+            for(var i = DiscordRPC.RPC_STARTING_PORT; i > DiscordRPC.RPC_ENDING_PORT; i--)
             {
-                _socket = new WebSocket($"ws://127.0.0.1:{rpcPort--}?v={DiscordRPC.RPC_VERSION}", origin: DiscordRPC.RPC_ORIGIN);
+                _socket = new WebSocket($"ws://127.0.0.1:{i--}?v={DiscordRPC.RPC_VERSION}", origin: DiscordRPC.RPC_ORIGIN);
                 _socket.MessageReceived += _socket_OnMessage;
                 _socket.NoDelay = true;
 
-                if (await _socket.OpenAsync())
+                if (await _socket.OpenAsync().ConfigureAwait(false))
                     return true;
-
-            } while (rpcPort >= DiscordRPC.RPC_ENDING_PORT);
+            }
 
             return false;
         }

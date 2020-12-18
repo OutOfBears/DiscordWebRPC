@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DiscordWebRPC.Test
@@ -11,6 +12,7 @@ namespace DiscordWebRPC.Test
 
         static async Task RunRestAsync(string[] args)
         {
+
             var client = new DiscordRestRPC();
             var invite = await client.SendInvite("roblox");
 

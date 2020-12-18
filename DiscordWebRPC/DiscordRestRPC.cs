@@ -34,7 +34,6 @@ namespace DiscordWebRPC
         private async Task<object> RPCRequest<T>(string cmd, T rpcRequestArgs)
         {
             var currentPort = _lastUsedPort;
-            var startingPort = currentPort;
             var nonce = Guid.NewGuid();
 
             HttpResponseMessage response = null;
@@ -48,29 +47,29 @@ namespace DiscordWebRPC
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             content.Headers.ContentType.CharSet = null;
 
-            do
+            var portList = DiscordRPC.CreatePortRange(currentPort);
+            foreach(var item in portList)
             {
-                if (currentPort < DiscordRPC.RPC_ENDING_PORT)
-                    currentPort = DiscordRPC.RPC_STARTING_PORT;
-
                 try
                 {
                     var url = $"http://127.0.0.1:{currentPort}/rpc?v={DiscordRPC.RPC_VERSION}";
                     response = await _client.PostAsync(url, content).ConfigureAwait(false);
                     if (response.StatusCode == HttpStatusCode.OK)
                         break;
-                } catch // timeouts cause exceptions to be thrown
+                }
+                catch // timeouts cause exceptions to be thrown
                 {
                     continue;
                 }
-            } while (--currentPort != startingPort);
+            }
 
-            if (response != null && response.StatusCode == HttpStatusCode.OK) 
+            if (response != null && response.StatusCode == HttpStatusCode.OK)
             {
                 _lastUsedPort = currentPort;
                 try
                 {
-                    var rpcResponse = JsonConvert.DeserializeObject<RPCEvent>(await response.Content.ReadAsStringAsync());
+                    var responseStr = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var rpcResponse = JsonConvert.DeserializeObject<RPCEvent>(responseStr);
                     if (rpcResponse != null && rpcResponse.Data != null)
                         return rpcResponse.Data;
                 }
@@ -79,7 +78,7 @@ namespace DiscordWebRPC
                     return default;
                 }
             }
-            
+
             return default;
         }
     }

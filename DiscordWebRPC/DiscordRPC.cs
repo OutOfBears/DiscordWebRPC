@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace DiscordWebRPC
 {
@@ -16,5 +15,18 @@ namespace DiscordWebRPC
 
         // This is required
         public const string RPC_ORIGIN = "https://discord.com";
+
+        // Dont change these methods
+        public static IList<int> CreatePortRange(int portStart)
+        {
+            var list = Enumerable.Range(RPC_ENDING_PORT + 1, RPC_PORT_RANGE - (RPC_STARTING_PORT - portStart))
+                .Reverse()
+                .ToList();
+
+            if (portStart < RPC_STARTING_PORT)
+                list.AddRange(Enumerable.Range(portStart + 1, RPC_STARTING_PORT - portStart).Reverse());
+
+           return list;
+        }
     }
 }
