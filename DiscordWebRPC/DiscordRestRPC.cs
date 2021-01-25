@@ -53,7 +53,7 @@ namespace DiscordWebRPC
                 try
                 {
                     var url = $"http://127.0.0.1:{currentPort}/rpc?v={DiscordRPC.RPC_VERSION}";
-                    response = await _client.PostAsync(url, content).ConfigureAwait(false);
+                    response = await _client.PostAsync(url, content).Timeout().ConfigureAwait(false);
                     if (response.StatusCode == HttpStatusCode.OK)
                         break;
                 }
@@ -68,7 +68,7 @@ namespace DiscordWebRPC
                 _lastUsedPort = currentPort;
                 try
                 {
-                    var responseStr = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var responseStr = await response.Content.ReadAsStringAsync().Timeout().ConfigureAwait(false);
                     var rpcResponse = JsonConvert.DeserializeObject<RPCEvent>(responseStr);
                     if (rpcResponse != null && rpcResponse.Data != null)
                         return rpcResponse.Data;

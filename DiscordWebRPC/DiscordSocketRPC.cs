@@ -44,7 +44,7 @@ namespace DiscordWebRPC
                 Code = code
             });
 
-            return await task.Task.ConfigureAwait(false) as InviteEvent;
+            return await task.Task.Timeout().ConfigureAwait(false) as InviteEvent;
         }
 
         public async Task<bool> Connect()
@@ -60,7 +60,7 @@ namespace DiscordWebRPC
                 _socket.MessageReceived += _socket_OnMessage;
                 _socket.NoDelay = true;
 
-                if (await _socket.OpenAsync().ConfigureAwait(false))
+                if (await _socket.OpenAsync().Timeout().ConfigureAwait(false))
                     return true;
             }
 
